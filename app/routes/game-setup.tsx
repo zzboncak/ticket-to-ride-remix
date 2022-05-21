@@ -1,6 +1,7 @@
 import { Form } from "@remix-run/react";
 import { useState } from "react";
 import type { ActionFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 
 /**
  * On submit, a new game will be created and saved to the database
@@ -18,7 +19,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
   }
   console.log("~ players", players);
-  return players;
+  return redirect("/calculate");
 };
 
 export default function GameSetup() {
