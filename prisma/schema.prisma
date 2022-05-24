@@ -9,3 +9,28 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Route {
+  startCity String
+  endCity   String
+  points    Int
+  player    Player? @relation(fields: [playerId], references: [id])
+  playerId  Int?
+  completed Boolean? @default(false)
+
+  @@id([startCity, endCity])
+}
+
+model Player {
+  id           Int     @id @default(autoincrement())
+  score        Int     @default(0)
+  routes       Route[]
+  longestRoute Boolean @default(false)
+  game         Game    @relation(fields: [gameId], references: [id])
+  gameId       String
+}
+
+model Game {
+  id      String   @id @default(uuid())
+  players Player[]
+}
