@@ -23,6 +23,7 @@ model Route {
 
 model Player {
   id           Int     @id @default(autoincrement())
+  name         String  
   score        Int     @default(0)
   routes       Route[]
   longestRoute Boolean @default(false)

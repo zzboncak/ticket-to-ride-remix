@@ -2,6 +2,8 @@ import { Form } from "@remix-run/react";
 import { useState } from "react";
 import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import { db } from "~/utils/db.server";
+import { genNewPlayer } from "~/utils/helpers";
 
 /**
  * On submit, a new game will be created and saved to the database
@@ -11,14 +13,17 @@ import { redirect } from "@remix-run/node";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
-  const players = [];
+  await db.game.upsert({ where: {id: "blah"}, update: {id: "blah"}, create: {id: "blah"} });
   for (let i = 1; i <= 5; i++) {
-    const player = data.get(`player${i}`);
-    if (player) {
-      players.push(player);
+    const playerName = data.get(`player${i}`);
+    if (playerName) {
+      const newPlayer = genNewPlayer((playerName as string), i, "blah");
+      await db.player.create({ data: newPlayer });
     }
   }
-  console.log("~ players", players);
+  
+  // loop through the players and add them to the database
+  // first, create a game, then create the players, and add them to the new game
   return redirect("/calculate");
 };
 
